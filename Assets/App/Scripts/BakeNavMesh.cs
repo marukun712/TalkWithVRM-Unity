@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Unity.AI.Navigation.Samples
+namespace Unity.AI.Navigation.Samples //エラー回避
 {
     public class BakeNavMesh : MonoBehaviour
     {
@@ -20,10 +20,10 @@ namespace Unity.AI.Navigation.Samples
         private void Initialize()
         {
             OVRSceneRoom room = FindAnyObjectByType<OVRSceneRoom>();
-            NavMeshSurface navMesh = room.gameObject.AddComponent<NavMeshSurface>();
+            NavMeshSurface navMesh = room.gameObject.AddComponent<NavMeshSurface>(); //NavMeshSurfaceを追加
 
-            // NavMeshをGlobalMeshにベイク
-            navMesh.collectObjects = CollectObjects.Children;
+            //ベイク
+            navMesh.collectObjects = CollectObjects.Children; //OVRSceneManagerから生成されるメッシュを指定するために子要素をベイクの対象にする
             navMesh.BuildNavMesh();
         }
     }

@@ -12,6 +12,8 @@ public class KeyboardManager : MonoBehaviour
 
     [SerializeField] TMPro.TextMeshProUGUI text;
 
+    [SerializeField] RandomMove CharacterMoveManager;
+
     private TouchScreenKeyboard overlayKeyboard;
 
     void Update()
@@ -21,6 +23,7 @@ public class KeyboardManager : MonoBehaviour
             overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
         }
 
+        //文字入力完了時の処理
         if (overlayKeyboard != null && overlayKeyboard.status == TouchScreenKeyboard.Status.Done)
         {
             FetchLLMReply(overlayKeyboard.text);
@@ -29,6 +32,7 @@ public class KeyboardManager : MonoBehaviour
 
     void FetchLLMReply(string text)
     {
+        //Workers AIのAPIをFetch
         StartCoroutine(GET($"https://hono-chat-api.marukun530.workers.dev/ai?text={text}"));
     }
 
@@ -45,9 +49,13 @@ public class KeyboardManager : MonoBehaviour
             {
                 Debug.Log(req.error);
             }
-            else
+            else if (req.downloadHandler.text != "")
             {
+                //吹き出しにテキストを追加
                 text.SetText(req.downloadHandler.text);
+
+                //プレイヤーの方向を向いて会話する
+                CharacterMoveManager.TalkWithPlayer();
             }
         }
     }
