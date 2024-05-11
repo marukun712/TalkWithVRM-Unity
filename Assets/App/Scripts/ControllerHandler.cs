@@ -1,35 +1,42 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using TMPro;
 
-public class KeyboardManager : MonoBehaviour
+public class ControllerHandler : MonoBehaviour
 {
-    [Header("LTouchかRTouchを選択する")]
-    [SerializeField] OVRInput.Controller _controller;
+    [SerializeField] OVRInput.Controller LController;
+    [SerializeField] OVRInput.Controller RController;
 
-    [SerializeField] TMPro.TextMeshProUGUI text;
-
-    [SerializeField] RandomMove CharacterMoveManager;
+    [SerializeField] GameObject Menu;
+    [SerializeField] GameObject Pointer;
+    [SerializeField] OpenAIChat chat;
 
     private TouchScreenKeyboard overlayKeyboard;
 
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, _controller))
+        if (OVRInput.GetDown(OVRInput.RawButton.A, RController))
         {
-            overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+            StartCoroutine(WaitForReturnKey());
         }
-
-        //文字入力完了時の処理
-        if (overlayKeyboard != null && overlayKeyboard.status == TouchScreenKeyboard.Status.Done)
+        if (OVRInput.GetDown(OVRInput.RawButton.B, RController))
         {
-            FetchLLMReply(overlayKeyboard.text);
+            Menu.SetActive(!Menu.activeSelf);
+            Pointer.SetActive(!Pointer.activeSelf);
         }
     }
 
+    private IEnumerator WaitForReturnKey()
+    {
+        TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("",
+            TouchScreenKeyboardType.Default, true, true);
+        yield return new WaitUntil(() => keyboard.text.Contains(System.Environment.NewLine));
+        string result = keyboard.text.Replace(System.Environment.NewLine, "");
+        StartCoroutine(chat.SendRequestToOpenAI(result));
+        keyboard.active = false;
+    }
+
+    /* CloudFlare Workersの無料枠を使った実装
     void FetchLLMReply(string text)
     {
         //Workers AIのAPIをFetch
@@ -59,4 +66,5 @@ public class KeyboardManager : MonoBehaviour
             }
         }
     }
+    */
 }

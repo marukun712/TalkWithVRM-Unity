@@ -73,3 +73,5 @@ UserSettings/
 
 # StreamingAssetsフォルダがビルド時に作られて何故か空フォルダが残る
 StreamingAssets.meta
+
+Assets/API_KEY.cs
