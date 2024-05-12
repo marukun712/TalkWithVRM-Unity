@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] TMPro.TextMeshProUGUI text;
+    [SerializeField] GameObject Chair;
 
-    public void SpawnCube()
+    public void SpawnChair()
     {
-        text.SetText("Click!!!");
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

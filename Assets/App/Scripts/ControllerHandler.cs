@@ -13,7 +13,7 @@ public class ControllerHandler : MonoBehaviour
 
     private TouchScreenKeyboard overlayKeyboard;
 
-    void Update()
+    private void Update()
     {
         if (OVRInput.GetDown(OVRInput.RawButton.A, RController))
         {
@@ -30,9 +30,15 @@ public class ControllerHandler : MonoBehaviour
     {
         TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("",
             TouchScreenKeyboardType.Default, true, true);
+
         yield return new WaitUntil(() => keyboard.text.Contains(System.Environment.NewLine));
         string result = keyboard.text.Replace(System.Environment.NewLine, "");
-        StartCoroutine(chat.SendRequestToOpenAI(result));
+
+        if (result != "")
+        {
+            StartCoroutine(chat.SendRequestToOpenAI(result));
+        }
+
         keyboard.active = false;
     }
 
