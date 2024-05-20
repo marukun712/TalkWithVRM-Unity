@@ -21,11 +21,13 @@ public class ControllerHandler : MonoBehaviour
         }
         if (OVRInput.GetDown(OVRInput.RawButton.B, RController))
         {
+            //メニューとレーザーの表示/非表示
             Menu.SetActive(!Menu.activeSelf);
             Pointer.SetActive(!Pointer.activeSelf);
         }
     }
 
+    //システムキーボードを開く
     private IEnumerator WaitForReturnKey()
     {
         TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("",

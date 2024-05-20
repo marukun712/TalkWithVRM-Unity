@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/App/Scenes/TalkWithVRM_Chat.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/App/Scenes/TalkMode.unity
+    guid: d20075f7421e81346963bc80878bdea4
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 090f2444d0f807e4b91c46bd1d07727f, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e397fa8a8ff32584ba87cf2ce2aba74d, type: 2}
