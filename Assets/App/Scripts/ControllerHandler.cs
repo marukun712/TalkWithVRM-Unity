@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using OpenAI;
 
 public class ControllerHandler : MonoBehaviour
 {
@@ -9,15 +11,26 @@ public class ControllerHandler : MonoBehaviour
 
     [SerializeField] GameObject Menu;
     [SerializeField] GameObject Pointer;
+    [SerializeField] Button voiceButton;
+    [SerializeField] Text voiceText;
     [SerializeField] OpenAIChat chat;
 
-    private TouchScreenKeyboard overlayKeyboard;
+    private bool isPushedButton = false;
 
     private void Update()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.A, RController))
+        if (OVRInput.GetDown(OVRInput.RawButton.A, RController)) //音声認識
         {
-            StartCoroutine(WaitForReturnKey());
+            if (isPushedButton)
+            {
+                StartCoroutine(chat.SendRequestToOpenAI(voiceText.text)); //認識結果を確定
+                isPushedButton = false;
+            }
+            else
+            {
+                voiceButton.onClick.Invoke(); //音声認識を開始
+                isPushedButton = true;
+            }
         }
         if (OVRInput.GetDown(OVRInput.RawButton.B, RController))
         {
@@ -25,23 +38,6 @@ public class ControllerHandler : MonoBehaviour
             Menu.SetActive(!Menu.activeSelf);
             Pointer.SetActive(!Pointer.activeSelf);
         }
-    }
-
-    //システムキーボードを開く
-    private IEnumerator WaitForReturnKey()
-    {
-        TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("",
-            TouchScreenKeyboardType.Default, true, true);
-
-        yield return new WaitUntil(() => keyboard.text.Contains(System.Environment.NewLine));
-        string result = keyboard.text.Replace(System.Environment.NewLine, "");
-
-        if (result != "")
-        {
-            StartCoroutine(chat.SendRequestToOpenAI(result));
-        }
-
-        keyboard.active = false;
     }
 
     /* CloudFlare Workersの無料枠を使った実装

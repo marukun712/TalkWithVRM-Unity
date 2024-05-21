@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using VRM;
+using OpenAI;
 
 public class RandomMove : MonoBehaviour
 {

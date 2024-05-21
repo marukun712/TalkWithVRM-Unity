@@ -7,7 +7,7 @@ public class PositioningModel : MonoBehaviour
 {
     [SerializeField] private Transform anchor;
     [SerializeField] private Transform target;
-    [SerializeField] private LineRenderer lineRenderer;
+    private LineRenderer lineRenderer;
 
     private float maxDistance = 100f;
     void Start()
