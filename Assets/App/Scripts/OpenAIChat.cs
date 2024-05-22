@@ -12,6 +12,7 @@ namespace OpenAI
     public class OpenAIChat : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI text;
+        [SerializeField] private VOICEVOX voice;
         private RandomMove characterMove;
 
         private const string apiURL = "https://api.openai.com/v1/chat/completions";
@@ -136,6 +137,7 @@ namespace OpenAI
 
             text.SetText(message);
 
+            StartCoroutine(voice.VOICEVOXTTS(message)); //音声を再生
             StartCoroutine(characterMove.TalkWithPlayer(emotion));
         }
     }
